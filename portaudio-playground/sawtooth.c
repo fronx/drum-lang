@@ -25,7 +25,7 @@ patestCallback
     paTestData *data = (paTestData*)userData;
     float *out = (float*)outputBuffer;
     unsigned int i;
-    float maxVolume  = 0.1f;
+    float maxVolume  = 0.05f;
     float maxVolume2 = 2 * maxVolume;
 
     for (i=0; i<framesPerBuffer; i++)
@@ -43,10 +43,9 @@ patestCallback
     return 0;
 }
 
-static paTestData userData;
-
 int main () {
     PaStream * stream;
+    paTestData userData;
     PA_BEGIN;
         stream = portaudio_playback(&patestCallback, &userData);
         PA_START_STREAM(stream);
