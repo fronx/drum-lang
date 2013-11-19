@@ -5,18 +5,19 @@ LDFLAGS    =
 CFLAGS    += `pkg-config --cflags portaudio-2.0`
 LDFLAGS   += `pkg-config --libs   portaudio-2.0`
 
-SOURCES    = sawtooth.c
+SOURCES    = sawtooth.c record.c
 OBJECTS    = $(SOURCES:.c=.o)
 
-EXECUTABLE = sawtooth
+all: $(SOURCES) sawtooth record
 
-all: $(SOURCES) $(EXECUTABLE)
+sawtooth: sawtooth.o
+	$(CC) sawtooth.o -o $@ $(LDFLAGS)
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
+record: record.o
+	$(CC) record.o -o $@ $(LDFLAGS)
 
 .c.o:
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm $(OBJECTS) $(EXECUTABLE)
+	rm $(OBJECTS) sawtooth record

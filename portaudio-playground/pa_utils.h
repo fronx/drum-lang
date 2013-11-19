@@ -38,11 +38,11 @@ __portaudio_open_stream
     return stream;
 }
 
-// PaStream *
-// portaudio_record ()
-// {
-//     return __portaudio_open_stream(RECORD);
-// }
+PaStream *
+portaudio_record (void *streamCallback, void *userData)
+{
+    return __portaudio_open_stream(RECORD, streamCallback, userData);
+}
 
 PaStream *
 portaudio_playback (void *streamCallback, void *userData)
