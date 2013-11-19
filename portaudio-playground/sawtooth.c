@@ -47,12 +47,12 @@ static paTestData userData;
 
 int main () {
     PaStream * stream;
-    PA_BEGIN
+    PA_BEGIN;
         stream = portaudio_playback(&patestCallback, &userData);
-        PA_START_STREAM(stream)
+        PA_START_STREAM(stream);
             Pa_Sleep( PA_SECONDS(1) );
-        PA_STOP_STREAM(stream)
-        PA_HANDLE_ERR( Pa_CloseStream(stream) )
-    PA_END
+        PA_STOP_STREAM(stream);
+        PA_HANDLE_ERR( Pa_CloseStream(stream) );
+    PA_END;
     return 0;
 }
