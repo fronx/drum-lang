@@ -15,6 +15,10 @@
                                    possibly changing, buffer size.
                                 */
 
+#define PA_HANDLE_ERR(FN_CALL) portaudio_handle_error((FN_CALL));
+#define PA_BEGIN               PA_HANDLE_ERR( Pa_Initialize() );
+#define PA_END                 PA_HANDLE_ERR( Pa_Terminate() );
+
 enum enumStreamType { RECORD
                     , PLAYBACK
                     };
@@ -44,20 +48,6 @@ void portaudio_handle_error (PaError err)
     if (err != paNoError) portaudio_error(err);
 }
 
-void portaudio_begin ()
-{
-    portaudio_handle_error(
-        Pa_Initialize()
-    );
-}
-
-void portaudio_end ()
-{
-    portaudio_handle_error(
-        Pa_Terminate()
-    );
-}
-
 /* This routine will be called by the PortAudio engine when audio is needed.
    It may called at interrupt level on some machines so don't do anything
    that could mess up the system like calling malloc() or free().
@@ -85,11 +75,11 @@ patestCallback
         *out++ = data->left_phase;
         *out++ = data->right_phase;
         // generate simple sawtooth phaser that ranges between -1.0 and 1.0.
-        data->left_phase += 0.001f;
+        data->left_phase += 0.0001f;
         // when signal reaches top, drop back down.
         if (data->left_phase >= maxVolume) data->left_phase -= maxVolume;
         // higher pitch so we can distinguish left and right.
-        data->right_phase += 0.003f;
+        data->right_phase += 0.0003f;
         if (data->right_phase >= maxVolume) data->right_phase -= maxVolume;
     }
     return 0;
@@ -103,7 +93,7 @@ __portaudio_open_stream
 )
 {
     PaStream *stream;
-    portaudio_handle_error(
+    PA_HANDLE_ERR(
         Pa_OpenDefaultStream(
             &stream,
             streamType == RECORD ? INPUT_STEREO  : NO_INPUT,
@@ -131,38 +121,18 @@ portaudio_playback ()
     return __portaudio_open_stream(PLAYBACK, &patestCallback);
 }
 
-void portaudio_start_stream (PaStream * stream)
-{
-    portaudio_handle_error(
-        Pa_StartStream(stream)
-    );
-}
-
-void portaudio_stop_stream (PaStream * stream)
-{
-    portaudio_handle_error(
-        Pa_StopStream(stream)
-    );
-}
-
 void portaudio_wait_seconds(int s)
 {
     Pa_Sleep(s*1000);
 }
 
-void list_audio_devices ()
-{
-
-}
-
 int main () {
     PaStream * stream;
-    portaudio_begin();
+    PA_BEGIN
         stream = portaudio_playback();
-        portaudio_start_stream(stream);
-            portaudio_wait_seconds(2);
-        portaudio_stop_stream(stream);
-        list_audio_devices();
-    portaudio_end();
+        PA_HANDLE_ERR( Pa_StartStream(stream) );
+            portaudio_wait_seconds(1);
+        PA_HANDLE_ERR( Pa_StopStream(stream) );
+    PA_END
     return 0;
 }
