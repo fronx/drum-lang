@@ -11,7 +11,7 @@ typedef struct
 paTestData;
 
 static int
-patestCallback
+sawtoothCallback
 (
     const void                      *inputBuffer,
     void                            *outputBuffer,
@@ -47,7 +47,7 @@ int main () {
     PaStream * stream;
     paTestData userData;
     PA_BEGIN;
-        stream = portaudio_playback(&patestCallback, &userData);
+        stream = portaudio_playback(&sawtoothCallback, &userData);
         PA_START_STREAM(stream);
             Pa_Sleep( PA_SECONDS(1) );
         PA_STOP_STREAM(stream);
