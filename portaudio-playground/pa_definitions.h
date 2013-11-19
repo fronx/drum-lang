@@ -15,10 +15,12 @@
                                    possibly changing, buffer size.
                                 */
 
-#define PA_HANDLE_ERR(FN_CALL) portaudio_handle_error((FN_CALL));
-#define PA_BEGIN               PA_HANDLE_ERR( Pa_Initialize() );
-#define PA_END                 PA_HANDLE_ERR( Pa_Terminate() );
-#define PA_SECONDS(s)          (s)*1000
+#define PA_HANDLE_ERR(FN_CALL)  portaudio_handle_error((FN_CALL));
+#define PA_BEGIN                PA_HANDLE_ERR( Pa_Initialize() );
+#define PA_END                  PA_HANDLE_ERR( Pa_Terminate() );
+#define PA_SECONDS(s)           (s)*1000
+#define PA_START_STREAM(stream) PA_HANDLE_ERR( Pa_StartStream((stream)) );
+#define PA_STOP_STREAM(stream)  PA_HANDLE_ERR( Pa_StopStream((stream)) );
 
 enum enumStreamType { RECORD
                     , PLAYBACK

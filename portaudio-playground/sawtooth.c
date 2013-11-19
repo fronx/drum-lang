@@ -49,10 +49,10 @@ int main () {
     PaStream * stream;
     PA_BEGIN
         stream = portaudio_playback(&patestCallback, &userData);
-        PA_HANDLE_ERR( Pa_StartStream(stream) );
+        PA_START_STREAM(stream)
             Pa_Sleep( PA_SECONDS(1) );
-        PA_HANDLE_ERR( Pa_StopStream(stream) );
-        PA_HANDLE_ERR( Pa_CloseStream(stream) );
+        PA_STOP_STREAM(stream)
+        PA_HANDLE_ERR( Pa_CloseStream(stream) )
     PA_END
     return 0;
 }
