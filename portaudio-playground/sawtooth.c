@@ -18,6 +18,7 @@
 #define PA_HANDLE_ERR(FN_CALL) portaudio_handle_error((FN_CALL));
 #define PA_BEGIN               PA_HANDLE_ERR( Pa_Initialize() );
 #define PA_END                 PA_HANDLE_ERR( Pa_Terminate() );
+#define PA_SECONDS(s)          (s)*1000
 
 enum enumStreamType { RECORD
                     , PLAYBACK
@@ -121,17 +122,12 @@ portaudio_playback ()
     return __portaudio_open_stream(PLAYBACK, &patestCallback);
 }
 
-void portaudio_wait_seconds(int s)
-{
-    Pa_Sleep(s*1000);
-}
-
 int main () {
     PaStream * stream;
     PA_BEGIN
         stream = portaudio_playback();
         PA_HANDLE_ERR( Pa_StartStream(stream) );
-            portaudio_wait_seconds(1);
+            Pa_Sleep( PA_SECONDS(1) );
         PA_HANDLE_ERR( Pa_StopStream(stream) );
     PA_END
     return 0;
