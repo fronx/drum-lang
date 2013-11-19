@@ -35,10 +35,10 @@ patestCallback
         // generate simple sawtooth phaser that ranges between -1.0 and 1.0.
         data->left_phase += 0.0001f;
         // when signal reaches top, drop back down.
-        if (data->left_phase >= maxVolume) data->left_phase -= maxVolume;
+        if (data->left_phase >= maxVolume) data->left_phase -= maxVolume2;
         // higher pitch so we can distinguish left and right.
         data->right_phase += 0.0003f;
-        if (data->right_phase >= maxVolume) data->right_phase -= maxVolume;
+        if (data->right_phase >= maxVolume) data->right_phase -= maxVolume2;
     }
     return 0;
 }

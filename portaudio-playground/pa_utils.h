@@ -18,8 +18,8 @@ PaStream *
 __portaudio_open_stream
 (
   StreamType streamType,
-  void *streamCallback,
-  void *userData
+  void       *streamCallback,
+  void       *userData
 )
 {
     PaStream *stream;
