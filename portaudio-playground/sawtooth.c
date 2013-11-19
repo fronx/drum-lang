@@ -129,6 +129,7 @@ int main () {
         PA_HANDLE_ERR( Pa_StartStream(stream) );
             Pa_Sleep( PA_SECONDS(1) );
         PA_HANDLE_ERR( Pa_StopStream(stream) );
+        PA_HANDLE_ERR( Pa_CloseStream(stream) );
     PA_END
     return 0;
 }
