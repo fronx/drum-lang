@@ -1,0 +1,72 @@
+# bubbles
+  { "O" = 100 ,
+    "o" =  70 ,
+    "." =  20 }
+
+# accents
+  < |  . |
+    |..  | >
+
+-- notation: bubbles
+--   triggers|..  | -- .       -> [0, 1]
+--     volume|Oo. | -- O, o, . -> [0..100]
+--    variant|LRLR| -- L, R    -> some parameter
+
+  fold
+  < |      bb   |
+    |aa aa      | >
+
+# alternation
+  < b| .|
+    a|. | >
+
+# triole
+  |...|
+
+# (*) a:bar n:num
+  repeat n a
+
+# repeat n:num x:bar
+  x + repeat (n - 1)
+
+# midi-instr name:string pitch:midi/note
+  instrument name
+    { "velocity": midi/vel
+      "note":     midi/note
+    }
+
+# drum-kit
+  midi-instr "kick"
+
+# main music-out print-out
+  < < alternation * 4 -> notes
+      accents         -> volume >
+    triplet * 4       -> notes
+  > o---------------------------------o print-out
+
+
+--[
+
+syntax
+------
+
+some-name -- a function call
+/         -- namespace separator
+"…"       -- string literal
+o-…-o     -- pipe one function into another (it's a wire! get it?!)
+|…|       -- a bar/pattern. can have multiple (ordered) dimensions (one per line)
+[a]       -- list of type a
+_         -- simple concatenation
+               |.. .| _ | .| == |.. . .|
+
++         -- "smart" concatenation
+               |.. .| + | .| == |....|
+               (implicit bar alignment)
+
+< … >     -- block of bars
+(…)       -- infix function definition
+# fn-name arg1:type arg2:type -- function signature
+--        -- comment
+--[ … ]-- -- comment block
+
+]--
