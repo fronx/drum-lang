@@ -17,7 +17,7 @@ void portaudio_handle_error (PaError err)
 PaStream *
 __portaudio_open_stream
 (
-  StreamType streamType,
+  StreamType  streamType,
   void       *streamCallback,
   void       *userData
 )
@@ -28,7 +28,7 @@ __portaudio_open_stream
             &stream,
             streamType == RECORD ? INPUT_STEREO  : NO_INPUT,
             streamType == RECORD ? NO_OUTPUT     : OUTPUT_STEREO,
-            paFloat32,         // sampleFormat
+            SAMPLE_FORMAT,
             SAMPLE_RATE,
             FRAMES_PER_BUFFER,
             streamCallback,

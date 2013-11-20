@@ -2,6 +2,7 @@
 #define __PA_DEFINITIONS_H_INCLUDED__
 
 #define SAMPLE_RATE       (44100)
+#define SAMPLE_FORMAT     paFloat32
 #define NO_INPUT          (0)
 #define NO_OUTPUT         (0)
 #define INPUT_STEREO      (2)
@@ -20,12 +21,13 @@
 #define PA_END                  PA_HANDLE_ERR( Pa_Terminate() )
 #define PA_SECONDS(s)           ((s)*1000)
 #define PA_START_STREAM(stream) PA_HANDLE_ERR( Pa_StartStream((stream)) )
-#define PA_STOP_STREAM(stream)  PA_HANDLE_ERR( Pa_StopStream((stream)) )
+#define PA_STOP_STREAM(stream)  PA_HANDLE_ERR( Pa_StopStream((stream)) );
 
 enum enumStreamType { RECORD
                     , PLAYBACK
                     };
 
 typedef enum enumStreamType StreamType;
+typedef float SAMPLE;
 
 #endif

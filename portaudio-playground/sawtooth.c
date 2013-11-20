@@ -15,9 +15,9 @@ sawtoothCallback
 (
     const void                      *inputBuffer,
     void                            *outputBuffer,
-    unsigned long                   framesPerBuffer,
-    const PaStreamCallbackTimeInfo* timeInfo,
-    PaStreamCallbackFlags           statusFlags,
+    unsigned long                    framesPerBuffer,
+    const PaStreamCallbackTimeInfo  *timeInfo,
+    PaStreamCallbackFlags            statusFlags,
     void                            *userData
 )
 {
@@ -44,7 +44,7 @@ sawtoothCallback
 }
 
 int main () {
-    PaStream * stream;
+    PaStream *stream;
     paTestData userData;
     PA_BEGIN;
         stream = portaudio_playback(&sawtoothCallback, &userData);

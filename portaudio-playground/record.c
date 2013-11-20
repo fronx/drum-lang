@@ -3,30 +3,35 @@
 #include "pa_definitions.h"
 #include "pa_utils.h"
 
+typedef struct
+{
+    int      frameIndex;
+    int      maxFrameIndex;
+    SAMPLE  *recordedSamples;
+} paTestData;
+
 static int
 record
 (
-    const void                      *inputBuffer,
-    void                            *outputBuffer,
+    const void                     *inputBuffer,
+    void                           *outputBuffer,
     unsigned long                   framesPerBuffer,
-    const PaStreamCallbackTimeInfo* timeInfo,
+    const PaStreamCallbackTimeInfo *timeInfo,
     PaStreamCallbackFlags           statusFlags,
-    void                            *userData
+    void                           *userData
 )
 {
     // float [] *data = (float [] *)userData;
     unsigned int i;
-
     for (i=0; i<framesPerBuffer; i++)
     {
     }
     return 0;
 }
 
-static float userData [100000];
-
 int main () {
-    PaStream * stream;
+    PaStream *stream;
+    float userData [100000];
     PA_BEGIN;
         stream = portaudio_record(&record, &userData);
         PA_START_STREAM(stream);
