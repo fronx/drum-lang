@@ -2,8 +2,13 @@ CC         = gcc
 CFLAGS     = -c -Wall -std=c99
 LDFLAGS    =
 
-CFLAGS    += `pkg-config --cflags portaudio-2.0`
-LDFLAGS   += `pkg-config --libs   portaudio-2.0`
+define DEPS
+	portaudio-2.0 \
+	aubio
+endef
+
+CFLAGS    += `pkg-config --cflags ${DEPS}`
+LDFLAGS   += `pkg-config --libs   ${DEPS}`
 
 SOURCES    = sawtooth.c record.c
 OBJECTS    = $(SOURCES:.c=.o)
