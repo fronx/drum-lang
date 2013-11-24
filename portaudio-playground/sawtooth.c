@@ -47,12 +47,21 @@ int main () {
     // TODO errors are not actually handled
     PaStream *stream;
     paTestData userData;
-    PA_BEGIN;
+    PaError err;
+    err = Pa_Initialize();
+    if (err != paNoError) goto error;
         stream = portaudio_playback(&sawtoothCallback, &userData);
-        PA_START_STREAM(stream);
-            Pa_Sleep( PA_SECONDS(1) );
-        PA_STOP_STREAM(stream);
-        PA_HANDLE_ERR( Pa_CloseStream(stream) );
-    PA_END;
+        if (stream != NULL)                      {
+            err = Pa_StartStream(stream);
+            if (err != paNoError) goto error;
+                Pa_Sleep( PA_SECONDS(1) );
+            err = Pa_StopStream(stream);
+            if (err != paNoError) goto error;
+            err = Pa_CloseStream(stream);
+            if (err != paNoError) goto error;    };
+    goto fin;
+error:
+fin:
+    Pa_Terminate();
     return 0;
 }

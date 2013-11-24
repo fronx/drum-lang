@@ -49,14 +49,25 @@ callback_record
 int main (void) {
     PaStream *stream;
     Recording recording = recording_new(100000);
-    PA_BEGIN;
+    PaError err;
+    err = Pa_Initialize();
+    if (err != paNoError) goto error;
         stream = portaudio_record(&callback_record, &recording);
-        PA_START_STREAM(stream);
-            Pa_Sleep( PA_SECONDS(2) );
-        PA_STOP_STREAM(stream);
-        PA_HANDLE_ERR( Pa_CloseStream(stream) );
-    PA_END;
+        if (stream != NULL)                      {
+            err = Pa_StartStream(stream);
+            if (err != paNoError) goto error;
+                Pa_Sleep( PA_SECONDS(2) );
+            err = Pa_StopStream(stream);
+            if (err != paNoError) goto error;
+            err = Pa_CloseStream(stream);
+            if (err != paNoError) goto error;    };
+    goto fin;
+error:
+    portaudio_print_error(err);
+fin:
+    Pa_Terminate();
     recording_print(&recording, 100);
+    free(recording.samples);
     printf("done.");
     return 0;
 }

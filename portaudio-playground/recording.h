@@ -11,18 +11,18 @@ typedef struct
 } Recording;
 
 Recording
-recording_new (long n_frames);
+recording_new (const long n_frames);
 
 int
-recording_frames_left (Recording *recording);
+recording_frames_left (const Recording *recording);
 
 void
 recording_forward (Recording *recording, unsigned int n_fwd);
 
 SAMPLE *
-recording_get_writer (Recording *recording);
+recording_get_writer (const Recording *recording);
 
 void
-recording_print (Recording *recording, int limit);
+recording_print (const Recording *recording, int limit);
 
 #endif

@@ -15,7 +15,7 @@ recording_new (long n_frames)
 }
 
 int
-recording_frames_left (Recording *recording)
+recording_frames_left (const Recording *recording)
 {
     return recording->max_frame_index - recording->frame_index;
 }
@@ -27,13 +27,13 @@ recording_forward (Recording *recording, unsigned int n_fwd)
 }
 
 SAMPLE *
-recording_get_writer (Recording *recording)
+recording_get_writer (const Recording *recording)
 {
     return &recording->samples[recording->frame_index];
 }
 
 void
-recording_print (Recording *recording, int limit)
+recording_print (const Recording *recording, int limit)
 {
     printf("frame_index: %d\n", recording->frame_index);
     printf("max_frame_index: %d\n", recording->max_frame_index);

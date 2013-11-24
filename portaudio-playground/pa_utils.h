@@ -5,38 +5,35 @@
 #include "pa_definitions.h"
 #include "macros.h"
 
-void portaudio_error (err)
+void portaudio_print_error (err)
 {
     printf("PortAudio error: %s\n", Pa_GetErrorText(err));
 }
 
-void portaudio_handle_error (PaError err)
-{
-    if (err != paNoError) portaudio_error(err);
-}
-
 PaStream *
 __portaudio_open_stream
-(
-  StreamType  streamType,
-  void       *streamCallback,
-  void       *userData
+( StreamType  streamType
+, void       *streamCallback
+, void       *userData
 )
 {
     PaStream *stream;
-    PA_HANDLE_ERR(
-        Pa_OpenDefaultStream(
-            &stream,
-            streamType == RECORD ? INPUT_STEREO  : NO_INPUT,
-            streamType == RECORD ? NO_OUTPUT     : OUTPUT_STEREO,
-            SAMPLE_FORMAT,
-            SAMPLE_RATE,
-            FRAMES_PER_BUFFER,
-            streamCallback,
-            userData           // will be passed to callback
-        )
-    );
-    return stream;
+    PaError err;
+    err = Pa_OpenDefaultStream
+        ( &stream
+        , streamType == RECORD ? INPUT_STEREO  : NO_INPUT
+        , streamType == RECORD ? NO_OUTPUT     : OUTPUT_STEREO
+        , SAMPLE_FORMAT
+        , SAMPLE_RATE
+        , FRAMES_PER_BUFFER
+        , streamCallback
+        , userData  // will be passed to callback
+        );
+    if (err != paNoError)            {
+        portaudio_print_error(err);
+        return NULL;                 }
+    else                             {
+        return stream;               }
 }
 
 PaStream *
