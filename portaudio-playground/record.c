@@ -1,33 +1,9 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <portaudio.h>
 #include "pa_definitions.h"
 #include "pa_utils.h"
-
-#define min(a,b) ((a) < (b) ? (a) : (b))
-
-typedef struct
-{
-    int      frame_index;
-    int      max_frame_index;
-    SAMPLE  *samples;
-} Recording;
-
-int
-recording_frames_left (Recording *recording)
-{
-    return recording->max_frame_index - recording->frame_index;
-}
-
-void recording_forward (Recording *recording, unsigned int n_fwd)
-{
-    recording->frame_index += n_fwd;
-}
-
-SAMPLE *
-recording_get_writer (Recording *recording)
-{
-    return &recording->samples[recording->frame_index];
-}
+#include "recording.h"
 
 static int
 recordBuffer( const SAMPLE  *reader
@@ -47,12 +23,13 @@ recordBuffer( const SAMPLE  *reader
         for (i=0; i < n_frames; i++)    {
             *writer++ = *reader++;      } }
 
+    recording_forward(recording, n_frames);
     return return_val;
 }
 
 
 static int
-record
+callback_record
 (
     const void                     *inputBuffer,
     void                           *outputBuffer,
@@ -69,16 +46,17 @@ record
         );
 }
 
-int main () {
+int main (void) {
     PaStream *stream;
-    float userData [100000];
+    Recording recording = recording_new(100000);
     PA_BEGIN;
-        stream = portaudio_record(&record, &userData);
+        stream = portaudio_record(&callback_record, &recording);
         PA_START_STREAM(stream);
             Pa_Sleep( PA_SECONDS(2) );
         PA_STOP_STREAM(stream);
         PA_HANDLE_ERR( Pa_CloseStream(stream) );
     PA_END;
-
+    recording_print(&recording, 100);
+    printf("done.");
     return 0;
 }

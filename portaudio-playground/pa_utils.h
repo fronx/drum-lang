@@ -3,6 +3,7 @@
 
 #include <portaudio.h>
 #include "pa_definitions.h"
+#include "macros.h"
 
 void portaudio_error (err)
 {

@@ -10,7 +10,7 @@ endef
 CFLAGS    += `pkg-config --cflags ${DEPS}`
 LDFLAGS   += `pkg-config --libs   ${DEPS}`
 
-SOURCES    = sawtooth.c record.c
+SOURCES    = sawtooth.c record.c recording.c
 OBJECTS    = $(SOURCES:.c=.o)
 
 all: $(SOURCES) sawtooth record
@@ -18,8 +18,8 @@ all: $(SOURCES) sawtooth record
 sawtooth: sawtooth.o
 	$(CC) sawtooth.o -o $@ $(LDFLAGS)
 
-record: record.o
-	$(CC) record.o -o $@ $(LDFLAGS)
+record: record.o recording.o
+	$(CC) record.o recording.o -o $@ $(LDFLAGS)
 
 .c.o:
 	$(CC) $(CFLAGS) $< -o $@
