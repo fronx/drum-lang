@@ -38,22 +38,14 @@ recordBuffer( const SAMPLE  *reader
     SAMPLE *writer = recording_get_writer(recording);
     unsigned long n_frames = min(recording_frames_left(recording), frames_per_buffer);
     int return_val = n_frames > 0 ? paContinue : paComplete;
-
     long i;
-    if (reader == NULL)
-    {
-        for (i=0; i<n_frames; i++)
-        {
-            *writer++ = SAMPLE_SILENCE;
-        }
-    }
-    else
-    {
-        for (i=0; i<n_frames; i++)
-        {
-            *writer++ = *reader++;
-        }
-    }
+
+    if (reader == NULL)                   {
+        for (i=0; i < n_frames; i++)    {
+            *writer++ = SAMPLE_SILENCE; } }
+    else                                  {
+        for (i=0; i < n_frames; i++)    {
+            *writer++ = *reader++;      } }
 
     return return_val;
 }
@@ -70,10 +62,11 @@ record
     void                           *userData
 )
 {
-    return recordBuffer( (const SAMPLE*)inputBuffer
-                       , framesPerBuffer
-                       , (Recording*)userData
-                       );
+    return recordBuffer
+        ( (const SAMPLE*)inputBuffer
+        , framesPerBuffer
+        , (Recording*)userData
+        );
 }
 
 int main () {
@@ -82,9 +75,10 @@ int main () {
     PA_BEGIN;
         stream = portaudio_record(&record, &userData);
         PA_START_STREAM(stream);
-            Pa_Sleep( PA_SECONDS(1) );
+            Pa_Sleep( PA_SECONDS(2) );
         PA_STOP_STREAM(stream);
         PA_HANDLE_ERR( Pa_CloseStream(stream) );
     PA_END;
+
     return 0;
 }
