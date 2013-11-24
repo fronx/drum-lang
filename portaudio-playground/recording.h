@@ -10,6 +10,9 @@ typedef struct
     SAMPLE  *samples;
 } Recording;
 
+Recording
+recording_new (long n_frames);
+
 int
 recording_frames_left (Recording *recording);
 
@@ -21,8 +24,5 @@ recording_get_writer (Recording *recording);
 
 void
 recording_print (Recording *recording, int limit);
-
-Recording
-recording_new (long n_frames);
 
 #endif

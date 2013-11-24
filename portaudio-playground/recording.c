@@ -3,13 +3,25 @@
 #include "recording.h"
 #include "macros.h"
 
+Recording
+recording_new (long n_frames)
+{
+    Recording recording =
+        { .frame_index = 0
+        , .max_frame_index = (n_frames - 1)
+        , .samples = (SAMPLE *) malloc(n_frames)
+        };
+    return recording;
+}
+
 int
 recording_frames_left (Recording *recording)
 {
     return recording->max_frame_index - recording->frame_index;
 }
 
-void recording_forward (Recording *recording, unsigned int n_fwd)
+void
+recording_forward (Recording *recording, unsigned int n_fwd)
 {
     recording->frame_index += n_fwd;
 }
@@ -20,7 +32,8 @@ recording_get_writer (Recording *recording)
     return &recording->samples[recording->frame_index];
 }
 
-void recording_print (Recording *recording, int limit)
+void
+recording_print (Recording *recording, int limit)
 {
     printf("frame_index: %d\n", recording->frame_index);
     printf("max_frame_index: %d\n", recording->max_frame_index);
@@ -31,14 +44,4 @@ void recording_print (Recording *recording, int limit)
     {
         printf("%d: %f\n", i, *reader++);
     }
-}
-
-Recording
-recording_new (long n_frames) {
-    Recording recording =
-        { .frame_index = 0
-        , .max_frame_index = (n_frames - 1)
-        , .samples = (SAMPLE *) malloc(n_frames)
-        };
-    return recording;
 }
