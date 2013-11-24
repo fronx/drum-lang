@@ -19,9 +19,10 @@
 
 #define PA_SECONDS(s)           ((s)*1000)
 
-enum enumStreamType { RECORD
-                    , PLAYBACK
-                    };
+enum enumStreamType
+    { RECORD
+    , PLAYBACK
+    };
 
 typedef enum enumStreamType StreamType;
 typedef float SAMPLE;

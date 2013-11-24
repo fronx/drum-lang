@@ -40,8 +40,6 @@ recording_print (const Recording *recording, int limit)
     int i;
     int n_samples = min(recording->frame_index, limit);
     SAMPLE *reader = recording->samples;
-    for (i=0; i < n_samples; i++)
-    {
-        printf("%d: %f\n", i, *reader++);
-    }
+    for (i=0; i < n_samples; i++)            {
+        printf("%d: %f\n", i, *reader++);    }
 }

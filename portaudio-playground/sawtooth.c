@@ -7,19 +7,17 @@ typedef struct
 {
    float left_phase;
    float right_phase;
-}
-paTestData;
+} paTestData;
 
 static int
 sawtoothCallback
-(
-    const void                      *inputBuffer,
-    void                            *outputBuffer,
-    unsigned long                    framesPerBuffer,
-    const PaStreamCallbackTimeInfo  *timeInfo,
-    PaStreamCallbackFlags            statusFlags,
-    void                            *userData
-)
+    ( const void                      *inputBuffer
+    , void                            *outputBuffer
+    , unsigned long                    framesPerBuffer
+    , const PaStreamCallbackTimeInfo  *timeInfo
+    , PaStreamCallbackFlags            statusFlags
+    , void                            *userData
+    )
 {
     // cast data passed through stream to our structure.
     paTestData *data = (paTestData*)userData;
@@ -43,24 +41,25 @@ sawtoothCallback
     return 0;
 }
 
-int main () {
-    // TODO errors are not actually handled
+int main (void)
+{
     PaStream *stream;
     paTestData userData;
     PaError err;
     err = Pa_Initialize();
     if (err != paNoError) goto error;
-        stream = portaudio_playback(&sawtoothCallback, &userData);
-        if (stream != NULL)                      {
-            err = Pa_StartStream(stream);
-            if (err != paNoError) goto error;
-                Pa_Sleep( PA_SECONDS(1) );
-            err = Pa_StopStream(stream);
-            if (err != paNoError) goto error;
-            err = Pa_CloseStream(stream);
-            if (err != paNoError) goto error;    };
+    stream = portaudio_playback(&sawtoothCallback, &userData);
+    if (stream != NULL)                      {
+        err = Pa_StartStream(stream);
+        if (err != paNoError) goto error;
+            Pa_Sleep( PA_SECONDS(1) );
+        err = Pa_StopStream(stream);
+        if (err != paNoError) goto error;
+        err = Pa_CloseStream(stream);
+        if (err != paNoError) goto error;    };
     goto fin;
 error:
+    portaudio_print_error(err);
 fin:
     Pa_Terminate();
     return 0;

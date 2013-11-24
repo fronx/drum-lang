@@ -12,10 +12,10 @@ void portaudio_print_error (err)
 
 PaStream *
 __portaudio_open_stream
-( StreamType  streamType
-, void       *streamCallback
-, void       *userData
-)
+    ( StreamType  streamType
+    , void       *streamCallback
+    , void       *userData
+    )
 {
     PaStream *stream;
     PaError err;

@@ -6,10 +6,11 @@
 #include "recording.h"
 
 static int
-recordBuffer( const SAMPLE  *reader
-            , unsigned long  frames_per_buffer
-            , Recording     *recording
-            )
+recordBuffer
+    ( const SAMPLE  *reader
+    , unsigned long  frames_per_buffer
+    , Recording     *recording
+    )
 {
     SAMPLE *writer = recording_get_writer(recording);
     unsigned long n_frames = min(recording_frames_left(recording), frames_per_buffer);
@@ -30,14 +31,13 @@ recordBuffer( const SAMPLE  *reader
 
 static int
 callback_record
-(
-    const void                     *inputBuffer,
-    void                           *outputBuffer,
-    unsigned long                   framesPerBuffer,
-    const PaStreamCallbackTimeInfo *timeInfo,
-    PaStreamCallbackFlags           statusFlags,
-    void                           *userData
-)
+    ( const void                     *inputBuffer
+    , void                           *outputBuffer
+    , unsigned long                   framesPerBuffer
+    , const PaStreamCallbackTimeInfo *timeInfo
+    , PaStreamCallbackFlags           statusFlags
+    , void                           *userData
+    )
 {
     return recordBuffer
         ( (const SAMPLE*)inputBuffer
@@ -46,21 +46,22 @@ callback_record
         );
 }
 
-int main (void) {
+int main (void)
+{
     PaStream *stream;
     Recording recording = recording_new(100000);
     PaError err;
     err = Pa_Initialize();
     if (err != paNoError) goto error;
-        stream = portaudio_record(&callback_record, &recording);
-        if (stream != NULL)                      {
-            err = Pa_StartStream(stream);
-            if (err != paNoError) goto error;
-                Pa_Sleep( PA_SECONDS(2) );
-            err = Pa_StopStream(stream);
-            if (err != paNoError) goto error;
-            err = Pa_CloseStream(stream);
-            if (err != paNoError) goto error;    };
+    stream = portaudio_record(&callback_record, &recording);
+    if (stream != NULL)                      {
+        err = Pa_StartStream(stream);
+        if (err != paNoError) goto error;
+            Pa_Sleep( PA_SECONDS(2) );
+        err = Pa_StopStream(stream);
+        if (err != paNoError) goto error;
+        err = Pa_CloseStream(stream);
+        if (err != paNoError) goto error;    };
     goto fin;
 error:
     portaudio_print_error(err);
