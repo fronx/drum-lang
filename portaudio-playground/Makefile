@@ -1,5 +1,5 @@
 CC         = gcc
-CFLAGS     = -c -Wall -std=c99
+CFLAGS     = -g -c -Wall -std=c99
 LDFLAGS    =
 
 define DEPS
