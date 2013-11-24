@@ -3,12 +3,61 @@
 #include "pa_definitions.h"
 #include "pa_utils.h"
 
+#define min(a,b) ((a) < (b) ? (a) : (b))
+
 typedef struct
 {
-    int      frameIndex;
-    int      maxFrameIndex;
-    SAMPLE  *recordedSamples;
-} paTestData;
+    int      frame_index;
+    int      max_frame_index;
+    SAMPLE  *samples;
+} Recording;
+
+int
+recording_frames_left (Recording *recording)
+{
+    return recording->max_frame_index - recording->frame_index;
+}
+
+void recording_forward (Recording *recording, unsigned int n_fwd)
+{
+    recording->frame_index += n_fwd;
+}
+
+SAMPLE *
+recording_get_writer (Recording *recording)
+{
+    return &recording->samples[recording->frame_index];
+}
+
+static int
+recordBuffer( const SAMPLE  *reader
+            , unsigned long  frames_per_buffer
+            , Recording     *recording
+            )
+{
+    SAMPLE *writer = recording_get_writer(recording);
+    unsigned long n_frames = min(recording_frames_left(recording), frames_per_buffer);
+    int return_val = n_frames > 0 ? paContinue : paComplete;
+
+    long i;
+    if (reader == NULL)
+    {
+        for (i=0; i<n_frames; i++)
+        {
+            *writer++ = SAMPLE_SILENCE;
+        }
+    }
+    else
+    {
+        for (i=0; i<n_frames; i++)
+        {
+            *writer++ = *reader++;
+        }
+    }
+
+    return return_val;
+}
+
 
 static int
 record
@@ -21,12 +70,10 @@ record
     void                           *userData
 )
 {
-    // float [] *data = (float [] *)userData;
-    unsigned int i;
-    for (i=0; i<framesPerBuffer; i++)
-    {
-    }
-    return 0;
+    return recordBuffer( (const SAMPLE*)inputBuffer
+                       , framesPerBuffer
+                       , (Recording*)userData
+                       );
 }
 
 int main () {

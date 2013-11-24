@@ -3,6 +3,7 @@
 
 #define SAMPLE_RATE       (44100)
 #define SAMPLE_FORMAT     paFloat32
+#define SAMPLE_SILENCE    0.0f
 #define NO_INPUT          (0)
 #define NO_OUTPUT         (0)
 #define INPUT_STEREO      (2)

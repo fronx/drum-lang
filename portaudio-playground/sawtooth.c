@@ -44,6 +44,7 @@ sawtoothCallback
 }
 
 int main () {
+    // TODO errors are not actually handled
     PaStream *stream;
     paTestData userData;
     PA_BEGIN;
